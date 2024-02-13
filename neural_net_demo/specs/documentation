@@ -11,7 +11,7 @@ The files in the directory are:
     3. raw_partial_30s.fif - contains the first 30 seconds of the data
     4. data_notes.txt - reserved for general notes about the data that might be important later.
     5. 'neural_net_demo/data/unpickle_data':
-        a. BIGVZD_spmusclass.bdf - the original bdf file containing all the data of the session.
+        a. BIJVZD_spmusclass.bdf - the original bdf file containing all the data of the session.
         b. draw_bdf_data.py - contains a function that crops the data and generates .fif files
         for faster testing (this function takes a long time to run, and so gets a file of it's own).
 - 'neural_net_demo/labs': this directory contains labs - python file for experimenting with libraries
@@ -20,6 +20,7 @@ The files in the directory are:
   This network is not a draft for the end result of the project.
   It's topology will is described bellow.
 - documentation.txt - this file.
+- CNN Diagram - a diagram representation of the CNN with the data for reference.
 
 The Data: The data is made out of 144 inputs and divided into 3 parts:
  - the EEG electrodes: 128 brainwave electrodes readings at a rate of 512HZ over an interval
