@@ -11,7 +11,7 @@ from utils import store_pickle, get_pickle
 # todo: convert Preprocessor to dataclass
 
 class Preprocessor:
-    path_to_pickle = ['..', 'data', 'pickled_data']
+    path_to_pickle = ['..', 'data', 'pickle']
 
     def __init__(self, format_dictionary, mat_path, batch_parameters, train_test_val_ratio):
         self.format_dictionary = format_dictionary
@@ -60,7 +60,7 @@ class Preprocessor:
 
         The Force Flag:
         This function is meant to run only once, and if a pickle file with the name "dataset.pickle"
-        is present in the path "neural_net_demo/data/pickled_data/kayas_data", the function will do nothing.
+        is present in the path "sanity_labs/data/pickle/kayas_data", the function will do nothing.
         Unless the force flag is set to true, this means that a new file needs to be loaded and pickled.
 
         :param: path_to_mat_file: path to the matlab file
@@ -119,12 +119,12 @@ class Preprocessor:
         The Shuffle (a.k.a the returned value):
         The shuffle (shuffled index list), is a triplet of index lists (for the 3 sets:
         train, test, and validate), each containing a random series of indices from the original numpy array.
-        This shuffle is to be used to train the network, without generating any copies of the data.
+        This shuffle is to be used to train the netless_data, without generating any copies of the data.
 
         How to Train the Network:
-        To train the network, the train_shuffle(the first element of the shuffle triplet)
+        To train the netless_data, the train_shuffle(the first element of the shuffle triplet)
         is iterated over, and for each iteration the batch of samples starting
-        at the current index of the train_shuffle, is fed into the network.
+        at the current index of the train_shuffle, is fed into the netless_data.
 
         :return: shuffle - the triples of shuffled index lists.
         """
