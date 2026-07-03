@@ -24,6 +24,7 @@ import scipy.io as sio
 from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import shuffle
+from sklearn.model_selection import train_test_split
 
 
 
@@ -230,8 +231,8 @@ def load_BCI2a_data(data_path, subject, training, all_trials=True):
 def load_ELIS_data(data_path, subject, training, all_trials=True):
     """ Loading and Dividing of the data set based on the subject-specific
     (subject-dependent) approach.
-    In this approach, we use 512 x 32 trials for training,
-    and 512 x 8 trials in for testing.
+    The subject's SMOTE-balanced trials are loaded once and split 80/20 into
+    disjoint train/test partitions (stratified, seed=42).
         Parameters
         ----------
         data_path: string
@@ -250,14 +251,33 @@ def load_ELIS_data(data_path, subject, training, all_trials=True):
     """
 
 
-    if training:
-        X = np.load('Zurs_Dataset/subjects/BIJVZD/SMOTEed_eeg_data.npy')
-        y = np.load('Zurs_Dataset/subjects/BIJVZD/SMOTEed_eeg_labels.npy')
-    else:
-        X = np.load('Zurs_Dataset/subjects/EFFEUS/SMOTEed_eeg_data.npy')
-        y = np.load('Zurs_Dataset/subjects/EFFEUS/SMOTEed_eeg_labels.npy')
+    # Map the subject index to its data folder. Extend as more subjects are added.
+    subject_codes = {1: 'BIJVZD'}
+    code = subject_codes.get(subject)
+    if code is None:
+        raise ValueError(
+            "No ELIS data mapping for subject index {}. Known subjects: {}."
+            .format(subject, sorted(subject_codes)))
 
-    return X, y
+    base = 'Zurs_Dataset/subjects/{}'.format(code)
+    X = np.load('{}/SMOTEed_eeg_data.npy'.format(base))
+    y = np.load('{}/SMOTEed_eeg_labels.npy'.format(base))
+
+    # Deterministic, stratified, DISJOINT train/test split of this one subject.
+    # Both the training=True and training=False calls use the same seed, so the
+    # two partitions never overlap. This replaces the previous implementation,
+    # which ignored `subject` and hardcoded train=BIJVZD / test=EFFEUS (a silent
+    # cross-subject setup that misrepresented the subject-dependent paradigm).
+    #
+    # NOTE: these .npy trials are already SMOTE-oversampled. Splitting *after*
+    # SMOTE means a synthetic test sample can share parents with training
+    # samples (mild optimism). A fully clean fix needs the raw (pre-SMOTE)
+    # trials so SMOTE can be applied to the training split only.
+    stratify = y.argmax(axis=-1) if y.ndim > 1 else y
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=stratify)
+
+    return (X_train, y_train) if training else (X_test, y_test)
 
 
 
