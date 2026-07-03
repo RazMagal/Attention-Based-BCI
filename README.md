@@ -1,34 +1,46 @@
-# :package: BCI Project
-## Team:
-* Team memeber 01 Aran 
-* Team memeber 02 Raz 
+# 🧠 Attention-Based BCI
 
+A Brain–Computer Interface (BCI) that reads EEG-captured brain-wave samples and predicts
+whether the user **intended to press the spacebar**. Built around **ATCNet**, an attention-based
+convolutional network for EEG motor-imagery classification.
 
-## Project Description:
-The project is a BCI application that can accept data samples of EEG captured Brain Waves and return
-whether or not the user intended to click the spacebar.
+## Team
+- **Aran**
+- **Raz**
 
-## Project Structure:
-* The project resides in the git repo path "ATC_NET/".
-* Our first attempt at a model resides in "neural_net_demo/" and is no longer maintained.
-* We did our sanity checks on much simpler models in "sanity_labs/" and it is also no longer maintained.
-* Our notes, issues and general help running Cluster and etc. in "information_and_documentation/"
+## Project Description
+The system ingests EEG samples of recorded brain waves and outputs a binary decision —
+*spacebar-click intended* vs. *not intended*. It preprocesses the raw signal, trains and
+evaluates the model per subject, and saves the trained model for downstream application.
 
-## Features
-* Machine learning Model ATC_NET, taken from git repo: https://github.com/Altaheri/EEG-ATCNet
-* Dataset from Nathanel Zur's experiment: 
-* Preproceesses dataset data, trains, tests and evaluates the model.
-* Saves the model for further application
+## Repository Structure
+| Path | Purpose |
+|------|---------|
+| `ATC_NET/` | Main, actively-maintained model, preprocessing, training & evaluation |
+| `sanity_labs/` | Sanity checks on simpler models — *no longer maintained* |
+| `neural_net_demo/` | First model attempt — *no longer maintained* |
+| `information_and_documentation/` | Notes, issues, and cluster/run instructions |
+
+## Model
+- **ATCNet** — attention-based temporal convolutional network for EEG classification,
+  adapted from [Altaheri/EEG-ATCNet](https://github.com/Altaheri/EEG-ATCNet).
+- Dataset: Nathanel Zur's EEG experiment. <!-- TODO: add dataset download link -->
+- Pipeline: preprocess → train → test → evaluate (accuracy, loss, confusion matrix, ROC).
 
 ## Installation
-1. clone repo
-2. create virtual environment and install required packages (requirements.txt)
-## Usage
-add your own data or Download subjects data matrices from provided link into "Zurs_Dataset/subjects/<subject_id>".
-use agreggate function in order to 
+```bash
+git clone https://github.com/RazMagal/Attention-Based-BCI.git
+cd Attention-Based-BCI
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+```
 
-## Contributing
-Big thanks to the open source community.
+## Usage
+1. Add your own EEG recordings, or download the subject data matrices from the dataset link
+   into `ATC_NET/Zurs_Dataset/subjects/<subject_id>/`.
+2. Run the aggregation step to assemble the per-subject data matrices.
+3. Run the training / evaluation entry point in `ATC_NET/` (see
+   `information_and_documentation/` for cluster run instructions).
 
 ## License
 GNU GPL
