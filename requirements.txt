@@ -10,9 +10,6 @@ h5py
 matplotlib
 python-dateutil
 
-# Minor / optional (a couple of modules import torch)
-torch
-
 # Pin to your environment's versions once confirmed, e.g.:
 #   tensorflow==2.15.0
 #   numpy==1.24.3
