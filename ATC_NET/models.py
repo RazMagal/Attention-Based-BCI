@@ -34,7 +34,7 @@ from attention_models import attention_block
 def ATCNet_(n_classes, in_chans = 22, in_samples = 1125, n_windows = 5, attention = 'mha',
            eegn_F1 = 16, eegn_D = 2, eegn_kernelSize = 64, eegn_poolSize = 7, eegn_dropout=0.3, 
            tcn_depth = 2, tcn_kernelSize = 4, tcn_filters = 32, tcn_dropout = 0.3,
-           tcn_activation = 'elu', fuse = 'average'):
+           tcn_activation = 'elu', fuse = 'average', from_logits = False):
     
     """ ATCNet model from Altaheri et al 2023.
         See details at https://ieeexplore.ieee.org/abstract/document/9852687
@@ -58,7 +58,6 @@ def ATCNet_(n_classes, in_chans = 22, in_samples = 1125, n_windows = 5, attentio
     dense_weightDecay = 0.5  
     conv_weightDecay = 0.009
     conv_maxNorm = 0.6
-    from_logits = False
 
     numFilters = eegn_F1
     F2 = numFilters*eegn_D
@@ -569,21 +568,21 @@ def DeepConvNet(nb_classes, Chans = 64, Samples = 256,
                                  kernel_constraint = max_norm(2., axis=(0,1,2)))(block1)
     block2       = BatchNormalization(epsilon=1e-05, momentum=0.9)(block2)
     block2       = Activation('elu')(block2)
-    block1       = MaxPooling2D(pool_size=(1, 3), strides=(1, 3))(block1)
+    block2       = MaxPooling2D(pool_size=(1, 3), strides=(1, 3))(block2)
     block2       = Dropout(dropoutRate)(block2)
     
     block3       = Conv2D(100, (1, 10),
                                  kernel_constraint = max_norm(2., axis=(0,1,2)))(block2)
     block3       = BatchNormalization(epsilon=1e-05, momentum=0.9)(block3)
     block3       = Activation('elu')(block3)
-    block1       = MaxPooling2D(pool_size=(1, 3), strides=(1, 3))(block1)
+    block3       = MaxPooling2D(pool_size=(1, 3), strides=(1, 3))(block3)
     block3       = Dropout(dropoutRate)(block3)
     
     block4       = Conv2D(200, (1, 10),
                                  kernel_constraint = max_norm(2., axis=(0,1,2)))(block3)
     block4       = BatchNormalization(epsilon=1e-05, momentum=0.9)(block4)
     block4       = Activation('elu')(block4)
-    block1       = MaxPooling2D(pool_size=(1, 3), strides=(1, 3))(block1)
+    block4       = MaxPooling2D(pool_size=(1, 3), strides=(1, 3))(block4)
     block4       = Dropout(dropoutRate)(block4)
     
     flatten      = Flatten()(block4)
