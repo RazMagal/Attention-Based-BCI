@@ -48,7 +48,7 @@ def draw_learning_curves(history, sub):
     plt.ylabel('Accuracy')
     plt.xlabel('Epoch')
     plt.legend(['Train', 'val'], loc='upper left')
-    plt.savefig('accuraccy_subject_' + str(sub) + '.png')
+    plt.savefig('accuracy_subject_' + str(sub) + '.png')
     plt.close()
 
     plt.plot(history.history['loss'])
@@ -276,7 +276,12 @@ def test(model, dataset_conf, results_path, allRuns = True):
     classes_labels = dataset_conf.get('cl_labels')
      
     # Test the performance based on several runs (seeds)
-    runs = os.listdir(results_path+"/saved models") 
+    saved_models_dir = results_path + "/saved models"
+    if not os.path.isdir(saved_models_dir):
+        raise FileNotFoundError(
+            "No trained models found at '{}'. Run training before testing.".format(saved_models_dir))
+    # sorted() -> deterministic mapping of run order to the 'Seed N' report columns
+    runs = sorted(os.listdir(saved_models_dir)) 
     # Initialize variables
     acc = np.zeros((n_sub, len(runs)))
     kappa = np.zeros((n_sub, len(runs)))

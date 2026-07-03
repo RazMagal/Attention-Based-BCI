@@ -108,58 +108,6 @@ import torch
 # from preprocess_HGD import load_HGD_data
 
 #%%
-def load_data_LOSO (data_path, subject, dataset): 
-    """ Loading and Dividing of the data set based on the 
-    'Leave One Subject Out' (LOSO) evaluation approach. 
-    LOSO is used for  Subject-independent evaluation.
-    In LOSO, the model is trained and evaluated by several folds, equal to the 
-    number of subjects, and for each fold, one subject is used for evaluation
-    and the others for training. The LOSO evaluation technique ensures that 
-    separate subjects (not visible in the training data) are usedto evaluate 
-    the model.
-    
-        Parameters
-        ----------
-        data_path: string
-            dataset path
-            # Dataset BCI Competition IV-2a is available at 
-            # http://bnci-horizon-2020.eu/database/data-sets
-        subject: int
-            number of subject in [1, .. ,9/14]
-            Here, the subject data is used  test the model and other subjects data
-            for training
-    """
-    
-    X_train, y_train = [], []
-    for sub in range (0,9):
-        path = data_path+'s' + str(sub+1) + '/'
-        
-        if (dataset == 'BCI2a'):
-            X1, y1 = load_BCI2a_data(path, sub+1, True)
-            X2, y2 = load_BCI2a_data(path, sub+1, False)
-        elif (dataset == 'CS2R'):
-            X1, y1, _, _, _  = load_CS2R_data_v2(path, sub, True)
-            X2, y2, _, _, _  = load_CS2R_data_v2(path, sub, False)
-        # elif (dataset == 'HGD'):
-        #     X1, y1 = load_HGD_data(path, sub+1, True)
-        #     X2, y2 = load_HGD_data(path, sub+1, False)
-        
-        X = np.concatenate((X1, X2), axis=0)
-        y = np.concatenate((y1, y2), axis=0)
-                   
-        if (sub == subject):
-            X_test = X
-            y_test = y
-        elif (X_train == []):
-            X_train = X
-            y_train = y
-        else:
-            X_train = np.concatenate((X_train, X), axis=0)
-            y_train = np.concatenate((y_train, y), axis=0)
-
-    return X_train, y_train, X_test, y_test
-
-
 def load_data_LOSO(data_path, subject, dataset):
     """ Loading and Dividing of the data set based on the
     'Leave One Subject Out' (LOSO) evaluation approach.
