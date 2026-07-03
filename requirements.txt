@@ -1,7 +1,18 @@
-#matplotlib==3.7.1
-#plotly~=5.14.1
-#mne~=1.6.0
-#scipy~=1.11.4
-#torch~=2.0.0
-#numpy~=1.24.3
-#torchvision~=0.17.1
+# Core ML / EEG stack (derived from actual imports in ATC_NET/)
+tensorflow
+keras
+scikit-learn
+imbalanced-learn
+numpy
+scipy
+mne
+h5py
+matplotlib
+python-dateutil
+
+# Minor / optional (a couple of modules import torch)
+torch
+
+# Pin to your environment's versions once confirmed, e.g.:
+#   tensorflow==2.15.0
+#   numpy==1.24.3
