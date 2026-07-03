@@ -91,7 +91,9 @@ def train(dataset_conf, train_conf, results_path):
     if os.path.exists(results_path):
         # Remove the folder and its contents
         shutil.rmtree(results_path)
-        os.makedirs(results_path)        
+    # Always (re)create the results dir. Previously makedirs ran only inside the
+    # exists-branch, so a fresh results_path crashed the file opens just below.
+    os.makedirs(results_path, exist_ok=True)
 
     # Get the current 'IN' time to calculate the overall training time
     in_exp = time.time()
@@ -385,7 +387,8 @@ def getModel(model_name, dataset_conf, from_logits = False):
             tcn_filters = 32,
             tcn_dropout = 0.3, 
             tcn_activation='elu',
-            )     
+            from_logits = from_logits,
+            )
     elif(model_name == 'TCNet_Fusion'):
         # Train using TCNet_Fusion: https://doi.org/10.1016/j.bspc.2021.102826
         model = models.TCNet_Fusion(n_classes = n_classes, Chans=n_channels, Samples=in_samples)      
