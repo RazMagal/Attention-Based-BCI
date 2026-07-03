@@ -30,7 +30,6 @@ from sklearn.model_selection import train_test_split
 
 
 ############### ARAN CODE
-import torch
 # import mne
 # from mne.preprocessing import ICA
 # import numpy as np
